@@ -27,5 +27,4 @@ func main() {
 	number[imax] = changing
 
 	fmt.Println(number)
-	fmt.Println(imin, imax)
 }
