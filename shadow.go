@@ -1,30 +1,24 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	var number [5]int
-	for i := 0; i < 5; i++ {
-		fmt.Scanln(&number[i])
-	}
+	var numb [5]int = [5]int{32, -87, 50, 1, 6}
 
-	min := number[0]
-	imin := 0
-	max := number[0]
-	imax := 0
 	for i := 0; i < 5; i++ {
-		if number[i] < min {
-			min = number[i]
-			imin = i
-		} else if number[i] > max {
-			max = number[i]
-			imax = i
+		fmt.Scanln(&numb[i])
+	}
+	fmt.Println(numb)
+	for j := 0; j < 5; j++ {
+		for i := 0; i < 4; i++ {
+			if numb[i] > numb[i+1] {
+				numbShadow := numb[i]
+				numb[i] = numb[i+1]
+				numb[i+1] = numbShadow
+			}
 		}
 	}
-
-	changing := number[imin]
-	number[imin] = number[imax]
-	number[imax] = changing
-
-	fmt.Println(number)
+	fmt.Println(numb)
 }
