@@ -2,34 +2,24 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
-/*
-1. fio := "Vasya Pupkin" получить имя.
-var fios [5]string = [5]string{"Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin"}
-отсортировать имена двумя способами - по возрастанию и уыванию
-*/
-
 func main() {
-	var fios [5]string = [5]string{"Vasya Pupkin", "Sasha Dupkin", "Pahy Sumkin", "Dasha Lupkin", "Natasha Turkin"}
-	var name [5]string
-	for i := 0; i < 5; i++ {
-		arr := strings.Split(fios[i], " ")
-		name[i] = arr[0]
-	}
+	var namb [5]int = [5]int{27, 12, 33, 2, 260}
+	var nambCore [5]int = [5]int{0, 0, 0, 0, 0}
 
-	for j := 0; j < 4; j++ {
-		for a := 0; a < 4; a++ {
-			if name[a] > name[a+1] {
-				nameShadow := name[a]
-				name[a] = name[a+1]
-				name[a+1] = nameShadow
+	min := namb[0]
+	for i := 0; i < 4; i++ {
+		for _, element := range namb {
+			if element < min {
+				min = element
+				nambCore[i] = min
 			}
 		}
-
 	}
-	fmt.Println(name)
+
+	fmt.Println(namb)
+	fmt.Println(nambCore)
 }
 
 /*
