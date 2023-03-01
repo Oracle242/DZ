@@ -2,36 +2,33 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
+/*
+1. fio := "Vasya Pupkin" получить имя.
+var fios [5]string = [5]string{"Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin"}
+отсортировать имена двумя способами - по возрастанию и уыванию
+*/
 func main() {
-	var numb [5]int = [5]int{27, 1, 12, 2, 260}
-	var numb2 [5]int = [5]int{0, 0, 0, 0, 0}
+	var fios [5]string = [5]string{"Vasya Pupkin", "Sasha Dupkin", "Pahy Sumkin", "Dasha Lupkin", "Natasha Turkin"}
+	var name [5]string
+	for i := 0; i < 5; i++ {
+		arr := strings.Split(fios[i], " ")
+		name[i] = arr[0]
+	}
 
-	fmt.Println(numb)
-	fmt.Println(numb2)
-
-	for j := 0; j < 5; j++ {
-		for i := 0; i < 4; i++ {
-			if numb[i] > numb[i+1] {
-				numbShadow := numb[i]
-				numb[i] = numb[i+1]
-				numb[i+1] = numbShadow
+	for j := 0; j < 4; j++ {
+		for a := 0; a < 4; a++ {
+			if name[a] > name[a+1] {
+				nameShadow := name[a]
+				name[a] = name[a+1]
+				name[a+1] = nameShadow
 			}
 		}
-	}
 
-	for f := 0; f < 5; f++ {
-		if numb[f] > numb2[f] {
-			numbShadow := numb[f]
-			numb[f] = numb2[f]
-			numb2[f] = numbShadow
-			numb[f] = 999
-		}
 	}
-
-	fmt.Println(numb)
-	fmt.Println(numb2)
+	fmt.Println(name)
 }
 
 /*
