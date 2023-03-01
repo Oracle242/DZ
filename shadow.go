@@ -10,6 +10,7 @@ import (
 var fios [5]string = [5]string{"Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin"}
 отсортировать имена двумя способами - по возрастанию и уыванию
 */
+
 func main() {
 	var fios [5]string = [5]string{"Vasya Pupkin", "Sasha Dupkin", "Pahy Sumkin", "Dasha Lupkin", "Natasha Turkin"}
 	var name [5]string
@@ -32,9 +33,6 @@ func main() {
 }
 
 /*
-1. fio := "Vasya Pupkin" получить имя.
-var fios [5]string = [5]string{"Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin", "Vasya Pupkin"}
-отсортировать имена двумя способами - по возрастанию и уыванию
 2. сортировка вставками
 имеется массив [27, 1, 12, 2, 260]
 создаем новый пустой массив [0, 0, 0, 0, 0]
