@@ -5,19 +5,21 @@ import (
 )
 
 func main() {
-	var namb [5]int = [5]int{27, 12, 33, 2, 260}
+	var namb [5]int = [5]int{27, 88, 12, 54, 1}
 	var nambCore [5]int = [5]int{0, 0, 0, 0, 0}
 
 	min := namb[0]
-	for i := 0; i < 4; i++ {
-		for _, element := range namb {
-			if element < min {
-				min = element
-				nambCore[i] = min
-			}
+	minid := 0
+
+	for id, element := range namb {
+		if element < min {
+			nambCore[minid] = element
+			min = id
 		}
 	}
+	namb[min] = 999
 
+	fmt.Println(min)
 	fmt.Println(namb)
 	fmt.Println(nambCore)
 }
