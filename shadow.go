@@ -12,12 +12,12 @@ func main() {
 		min := namb[0]
 		minid := 0
 		for i := 0; i < 5; i++ {
-			if namb[i] < min {
+			if namb[i] > min {
 				min = namb[i]
 				minid = i
 			}
 		}
-		namb[minid] = 9999
+		namb[minid] = -9999
 		nambCore[j] = min
 	}
 	fmt.Println(namb)
