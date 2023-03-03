@@ -17,7 +17,7 @@ func main() {
 				minid = i
 			}
 		}
-		namb[minid] = -9999
+		namb[minid] = 9999
 		nambCore[j] = min
 	}
 	fmt.Println(namb)
