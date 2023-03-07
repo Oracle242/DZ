@@ -64,7 +64,7 @@ func (cart cartoteka) osnov() cartoteka {
 	fmt.Println("Выбор фильма от 1 до 10. 11 вернуться в меню.")
 	doubleMenu := 0
 	fmt.Scanln(&doubleMenu)
-	if doubleMenu < 10 {
+	if doubleMenu <= 10 {
 		fmt.Println(cart.film[doubleMenu-1])
 	}
 	return cart
