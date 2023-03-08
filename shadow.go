@@ -16,7 +16,7 @@ type portfolio struct {
 
 type cartoteka struct {
 	filmsAmount int
-	film        [10]cinema
+	film        []cinema
 }
 
 func vibor() int {
@@ -39,8 +39,7 @@ func main() {
 			cart.osnov()
 		case 3:
 			cart.filmsAmount = 0
-			cart.film = [10]cinema{}
-
+			cart.film = []cinema{}
 		case 4:
 			return
 		}
@@ -50,7 +49,7 @@ func main() {
 func (cart cartoteka) fillCartoteka() cartoteka {
 	newFilm := cinema{}
 	newFilm = newFilm.fillCinema()
-	cart.film[cart.filmsAmount] = newFilm
+	cart.film = append(cart.film, newFilm)
 	cart.filmsAmount++
 	return cart
 }
@@ -58,7 +57,7 @@ func (cart cartoteka) fillCartoteka() cartoteka {
 func (cart cartoteka) osnov() cartoteka {
 	fmt.Println("Всего занесено фильмов:", cart.filmsAmount)
 	fmt.Println("Ваши фильмы:")
-	for i := 0; i < 9; i++ {
+	for i := 0; i < len(cart.film); i++ {
 		fmt.Println(i, ".", cart.film[i].name, cart.film[i].director.name)
 	}
 	fmt.Println("Выбор фильма от 1 до 10. 11 вернуться в меню.")
@@ -74,16 +73,16 @@ func (newFilm cinema) fillCinema() cinema {
 	fmt.Println("Введите название фильм")
 	fmt.Scanln(&newFilm.name)
 
-	fmt.Println("Введите год фильма")
-	fmt.Scanln(&newFilm.age)
+	// fmt.Println("Введите год фильма")
+	// fmt.Scanln(&newFilm.age)
 
-	fmt.Println("Введите имя автора фильма")
-	fmt.Scanln(&newFilm.director.name)
+	// fmt.Println("Введите имя автора фильма")
+	// fmt.Scanln(&newFilm.director.name)
 
-	fmt.Println("Введите фамилию автора ")
-	fmt.Scanln(&newFilm.director.lastName)
+	// fmt.Println("Введите фамилию автора ")
+	// fmt.Scanln(&newFilm.director.lastName)
 
-	fmt.Println("Введите возраст автора ")
-	fmt.Scanln(&newFilm.director.yearsOld)
+	// fmt.Println("Введите возраст автора ")
+	// fmt.Scanln(&newFilm.director.yearsOld)
 	return newFilm
 }
