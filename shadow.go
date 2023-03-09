@@ -1,37 +1,58 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-func main() {
-	var namb [5]int = [5]int{27, 1, 12, 2, 260}
-	var nambCore [5]int = [5]int{0, 0, 0, 0, 0}
-
-	for j := 0; j < 5; j++ {
-		min := namb[0]
-		minid := 0
-		for i := 0; i < 5; i++ {
-			if namb[i] > min {
-				min = namb[i]
-				minid = i
-			}
-		}
-		namb[minid] = -9999
-		nambCore[j] = min
-	}
-	fmt.Println(namb)
-	fmt.Println(nambCore)
+type Numbers struct {
+	num1 int
+	num2 int
 }
 
-/*
-2. сортировка вставками
-имеется массив [27, 1, 12, 2, 260]
-создаем новый пустой массив [0, 0, 0, 0, 0]
-ищем минимальное, вставляем его на 0 индекс, и в первоначальном массиве заменяем это число на супер большое:
-[27, 99999, 12, 2, 260]
-[1, 0, 0, 0, 0]
-снова ищем минимальное. вставляем его на 1 место и заменяем
-[27, 99999, 12, 99999, 260]
-[1, 2, 0, 0, 0]
-*/
+type NumbersInterface interface {
+	Sum() int
+	Multiplay() int
+	Division() float64
+	Substract() int
+}
+
+func (n Numbers) Sum() int {
+	return n.num1 + n.num2
+}
+func (n Numbers) Substract() int {
+	return n.num1 - n.num2
+}
+func (n Numbers) Multiplay() int {
+	return n.num1 * n.num2
+}
+func (n Numbers) Division() float64 {
+	if n.num2 == 0 {
+		fmt.Println("На ноль делить низя")
+	}
+	return float64(n.num1) / float64(n.num2)
+}
+func main() {
+
+	numb1 := 0
+	numb2 := 0
+	sign := "0"
+	fmt.Println("Введи первое число")
+	fmt.Scanln(&numb1)
+	fmt.Println("Введи +-*/")
+	fmt.Scanln(&sign)
+	fmt.Println("Введи второе число")
+	fmt.Scanln(&numb2)
+
+	var i NumbersInterface
+	numbers := Numbers{numb1, numb2}
+	i = numbers
+
+	switch sign {
+	case "+":
+		fmt.Printf("Ответ: %d\n", i.Sum())
+	case "-":
+		fmt.Printf("Ответ: %d\n", i.Substract())
+	case "*":
+		fmt.Printf("Ответ: %d\n", i.Multiplay())
+	case "/":
+		fmt.Printf("Ответ: %f\n", i.Division())
+	}
+}
