@@ -56,3 +56,5 @@ func main() {
 		fmt.Printf("Ответ: %f\n", i.Division())
 	}
 }
+
+// ?dsf
