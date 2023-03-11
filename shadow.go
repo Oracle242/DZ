@@ -6,11 +6,10 @@ type Numbers struct {
 	num1 int
 	num2 int
 }
-
 type NumbersInterface interface {
 	Sum() int
 	Multiplay() int
-	Division() float64
+	Division()
 	Substract() int
 }
 
@@ -23,14 +22,14 @@ func (n Numbers) Substract() int {
 func (n Numbers) Multiplay() int {
 	return n.num1 * n.num2
 }
-func (n Numbers) Division() float64 {
+func (n Numbers) Division() {
 	if n.num2 == 0 {
 		fmt.Println("На ноль делить низя")
+	} else if n.num2 != 0 {
+		fmt.Println(float64(n.num1) / float64(n.num2))
 	}
-	return float64(n.num1) / float64(n.num2)
 }
 func main() {
-
 	numb1 := 0
 	numb2 := 0
 	sign := "0"
@@ -40,11 +39,9 @@ func main() {
 	fmt.Scanln(&sign)
 	fmt.Println("Введи второе число")
 	fmt.Scanln(&numb2)
-
 	var i NumbersInterface
 	numbers := Numbers{numb1, numb2}
 	i = numbers
-
 	switch sign {
 	case "+":
 		fmt.Printf("Ответ: %d\n", i.Sum())
@@ -53,6 +50,6 @@ func main() {
 	case "*":
 		fmt.Printf("Ответ: %d\n", i.Multiplay())
 	case "/":
-		fmt.Printf("Ответ: %f\n", i.Division())
+		i.Division()
 	}
 }
