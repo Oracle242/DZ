@@ -3,26 +3,21 @@ package main
 import "fmt"
 
 func main() {
-	nameArr := [6]string{"vasya", "petya", "masha", "vasya", "vasya", "fedya"}
-	slov := map[string]int{}
-
-	// var mass []string
-	// var mass1 []int
-
-	// for key, valye := range slov {
-	// 	mass = append(mass, key)
-	// 	mass1 = append(mass1, valye)
-	// }
-
-	fmt.Println(nameArr)
-	// fmt.Println(mass)
-	// fmt.Println(mass1)
+	slov := make(map[string]int)
+	nameArr := [10]string{"vasya", "petya", "fedya", "vasya", "vasya", "fedya", "masha", "petya", "petya", "vasya"}
+	for _, v := range nameArr {
+		slov[v]++
+	}
+	fmt.Println(slov)
 }
 
-// 1.
-// ['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
-// посчитать с помощью map сколько раз встречается каждое имя
-//
+/*
+1.
+['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
+посчитать с помощью map сколько раз встречается каждое имя
+
+Печать из терминала - map[fedya:2 masha:1 petya:3 vasya:4]
+*/
 
 // 2.
 // ['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
