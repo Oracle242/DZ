@@ -3,10 +3,10 @@ package main
 import "fmt"
 
 func main() {
-	slov := make(map[string]int)
+	slov := make(map[string]string)
 	nameArr := [10]string{"vasya", "petya", "fedya", "vasya", "vasya", "fedya", "masha", "petya", "petya", "vasya"}
 	for _, v := range nameArr {
-		slov[v]++
+		slov[v] = ""
 	}
 	fmt.Println(slov)
 }
@@ -18,10 +18,13 @@ func main() {
 
 Печать из терминала - map[fedya:2 masha:1 petya:3 vasya:4]
 */
+/*
+2.
+['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
+вывести уникальные имена
+отсортировать имена
+Печать из терминала - map[fedya: masha: petya: vasya:]
+*/
 
-// 2.
-// ['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
-// вывести уникальные имена
-// отсортировать имена
 // разобраться с range(с разными вариациями)
 // Изучить раздел misc.
