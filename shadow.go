@@ -3,28 +3,32 @@ package main
 import "fmt"
 
 func main() {
-	slov := make(map[string]string)
-	nameArr := [10]string{"vasya", "petya", "fedya", "vasya", "vasya", "fedya", "masha", "petya", "petya", "vasya"}
-	for _, v := range nameArr {
-		slov[v] = ""
+	nameArr := [10]string{"vasya", "petya", "fedya", "vasya", "vasya", "fedya", "masha", "petya", "petya", "alex"}
+	slais := []string{}
+	for i := 0; i < len(nameArr); i++ {
+		for j := 0; j < len(nameArr)-1; j++ {
+			if nameArr[j] > nameArr[j+1] {
+				nameShadow := nameArr[j]
+				nameArr[j] = nameArr[j+1]
+				nameArr[j+1] = nameShadow
+			}
+		}
 	}
-	fmt.Println(slov)
+
+	for t := 0; t < len(nameArr); t++ {
+		slais = append(slais, nameArr[t])
+	}
+
+	fmt.Println(slais)
 }
 
 /*
 1.
-['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
-посчитать с помощью map сколько раз встречается каждое имя
-
-Печать из терминала - map[fedya:2 masha:1 petya:3 vasya:4]
-*/
-/*
-2.
-['vasya', 'petya', 'masha', 'vasya', 'vasya', 'fedya']
-вывести уникальные имена
-отсортировать имена
-Печать из терминала - map[fedya: masha: petya: vasya:]
+ отсортировать массив ["vasya", "petya", "fedya", "vasya", "vasya", "fedya", "masha", "petya", "petya", "alex"]
+ с помощью метода выбором (где мы ищем максимальные элементы)
+ и отсортированные значения помещать в слайс
 */
 
 // разобраться с range(с разными вариациями)
 // Изучить раздел misc.
+// Практика слайсов.
