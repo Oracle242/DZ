@@ -3,29 +3,35 @@ package main
 import "fmt"
 
 func main() {
-	nameArr := [10]string{"vasya", "petya", "fedya", "vasya", "vasya", "fedya", "masha", "petya", "petya", "alex"}
-	slais := []string{}
+	channels := [7]string{"NBC", "CBS", "ABC", "Fox", "CW", "Russia1", "TNT"}
 
-	for i := 0; i < len(nameArr); i++ {
-		max := nameArr[0]
-		min2 := 0
-		for j := 0; j < len(nameArr); j++ {
-			if nameArr[j] < max {
-				max = nameArr[j]
-				min2 = j
+	tricolor := make(map[string]string)
+
+	for i := 0; i < len(channels); i++ {
+		for j := 0; j < len(channels)-1; j++ {
+			if channels[j] > channels[j+1] {
+				cloudChannels := channels[j+1]
+				channels[j+1] = channels[j]
+				channels[j] = cloudChannels
 			}
 		}
-		nameArr[min2] = "zzz"
-		slais = append(slais, max)
 	}
 
-	fmt.Println(slais)
-}
+	channelSlEng := channels[:4]
+	for _, meaning := range channelSlEng {
+		tricolor[meaning] = "Eng"
+	}
 
-/*
-44 отсортировать массив с помощью метода выбором (где мы ищем максимальные элементы)
- и отсортированные значения помещать в слайс
-*/
+	channeSlRus := channels[5:7]
+	for _, meaning := range channeSlRus {
+		tricolor[meaning] = "rus"
+	}
+
+	fmt.Println(channels)
+	fmt.Println(channelSlEng)
+	fmt.Println(channeSlRus)
+	fmt.Println(tricolor)
+}
 
 // разобраться с range(с разными вариациями)
 // Изучить раздел misc.
