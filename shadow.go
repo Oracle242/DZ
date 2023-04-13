@@ -8,64 +8,125 @@ import (
 	"strconv"
 )
 
+type cinema struct {
+	name     string
+	age      int
+	director portfolio
+}
+
+type portfolio struct {
+	name     string
+	lastName string
+	yearsOld int
+}
+
+type cartoteka struct {
+	filmsAmount int
+	film        []cinema
+}
+
+func vibor() int {
+	numberComand := 0
+	fmt.Println("1-Добавить новый фильм в картотеку")
+	fmt.Println("2-Посмотреть информацию о фильме")
+	fmt.Println("3-Очистить картотеку")
+	fmt.Println("4-Запись в файл txt")
+	fmt.Println("5-Выход")
+	fmt.Scanln(&numberComand)
+	return numberComand
+}
+
 func main() {
-	bufer := []string{}
-	pathFile := "C:/Users/PSXnv/Desktop/Task.txt"
+	cart := cartoteka{}
+	for {
+		switch vibor() {
+		case 1:
+			cart = cart.fillCartoteka()
+		case 2:
+			cart.osnov()
+		case 3:
+			cart.filmsAmount = 0
+			cart.film = []cinema{}
+		case 4:
+			cart.save()
+		case 5:
+			return
+		}
+	}
+}
 
-	file, err := os.Open(pathFile)
+func (cart cartoteka) fillCartoteka() cartoteka {
+	newFilm := cinema{}
+	newFilm = newFilm.fillCinema()
+	cart.film = append(cart.film, newFilm)
+	cart.filmsAmount++
+	return cart
+}
+
+func (cart cartoteka) osnov() cartoteka {
+	fmt.Println("Всего занесено фильмов:", cart.filmsAmount)
+	fmt.Println("Ваши фильмы:")
+	for i := 0; i < len(cart.film); i++ {
+		fmt.Println(i, ".", cart.film[i].name, cart.film[i].director.name)
+	}
+	fmt.Println("Выбор фильма от 1 до 10. 11 вернуться в меню.")
+	doubleMenu := 0
+	fmt.Scanln(&doubleMenu)
+	if doubleMenu <= 10 {
+		fmt.Println(cart.film[doubleMenu-1])
+	}
+	return cart
+}
+
+func (newFilm cinema) fillCinema() cinema {
+	fmt.Println("Введите название фильм")
+	fmt.Scanln(&newFilm.name)
+
+	fmt.Println("Введите год фильма")
+	fmt.Scanln(&newFilm.age)
+
+	fmt.Println("Введите имя автора фильма")
+	fmt.Scanln(&newFilm.director.name)
+
+	fmt.Println("Введите фамилию автора ")
+	fmt.Scanln(&newFilm.director.lastName)
+
+	fmt.Println("Введите возраст автора ")
+	fmt.Scanln(&newFilm.director.yearsOld)
+	return newFilm
+}
+
+func (cart cartoteka) save() {
+	bufer := []cinema{}
+
+	createFile, err := os.Create("Картотека.txt")
 	if err != nil {
-		log.Fatalf("Ошибка открытия файла: %s", err)
-		return
-	}
-
-	fileScanner := bufio.NewScanner(file)
-
-	for fileScanner.Scan() {
-		bufer = append(bufer, fileScanner.Text())
-	}
-
-	if err := fileScanner.Err(); err != nil {
-		log.Fatalf("Ошибка при чтении файла: %s", err)
-	}
-	file.Close()
-
-	createFile, err := os.Create("random.txt")
-	if err != nil {
-		fmt.Printf("Ошибка открытия файла %s", err)
-		return
+		log.Fatalf("Ошибка открытия файла %s", err)
 	}
 	defer createFile.Close()
 	writer := bufio.NewWriter(createFile)
 
-	for _, line := range dataProcessing(bufer) {
-		_, err = writer.WriteString(line + "\n")
+	buf := cart.dataProcessing(bufer)
+	for _, line := range buf {
+		age1 := line.age
+		age2 := strconv.Itoa(age1)
+		yearsOld1 := line.director.yearsOld
+		yearsOld2 := strconv.Itoa(yearsOld1)
+		_, err = writer.WriteString(line.name + " " + age2 + " " + line.director.name + " " + line.director.lastName + " " + yearsOld2 + "\n")
 		if err != nil {
-			fmt.Printf("ошибка считывания данных %s", err)
-			return
+			log.Fatalf("ошибка считывания данных %s", err)
 		}
-	}
 
-	err = writer.Flush()
-	if err != nil {
-		fmt.Printf("Ошибка записи в буфер %s", err)
+		err = writer.Flush()
+		if err != nil {
+			fmt.Printf("Ошибка записи в буфер %s", err)
+		}
 	}
 }
+func (cart cartoteka) dataProcessing(bufer []cinema) []cinema {
 
-func dataProcessing(bufer []string) []string {
-	znak := " !"
-	for i, line := range bufer {
-		if line < "0" || line > "999" {
-			bufer[i] = line + znak
-		} else {
-			numbr, err := strconv.Atoi(line)
-			if err != nil {
-				log.Fatal(err)
-			}
-			bufer[i] = strconv.Itoa(numbr * 5)
-		}
+	for i := range cart.film {
+		bufer = append(bufer, cart.film[i])
 	}
 	return bufer
 }
-
-// Изучить раздел misc.
-// Практика слайсов.
