@@ -102,10 +102,7 @@ func (cart cartoteka) openAndReadFale() cartoteka {
 				} else if i == 4 {
 					newFilm.director.yearsOld = num
 				}
-			} else {
-
 			}
-
 		}
 		cart.film = append(cart.film, newFilm)
 		cart.filmsAmount++
