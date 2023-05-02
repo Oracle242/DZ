@@ -23,7 +23,7 @@ type portfolio struct {
 
 type cartoteka struct {
 	filmsAmount int
-	film        []cinema
+	films       []cinema
 }
 
 // печать меню выбора
@@ -39,7 +39,7 @@ func vibor() int {
 
 func main() {
 	cart := cartoteka{}
-	cart = cart.openAndReadFale()
+	cart = cart.openAndReadFile()
 	for {
 		switch vibor() {
 		case 1:
@@ -48,7 +48,7 @@ func main() {
 			cart.osnov()
 		case 3:
 			cart.filmsAmount = 0
-			cart.film = []cinema{}
+			cart.films = []cinema{}
 		case 4:
 			cart.save()
 			return
@@ -60,54 +60,58 @@ func main() {
 func (cart cartoteka) osnov() cartoteka {
 	fmt.Println("Всего занесено фильмов:", cart.filmsAmount)
 	fmt.Println("Ваши фильмы:")
-	for i := 0; i < len(cart.film); i++ {
-		fmt.Println(i+1, ".", cart.film[i].name, cart.film[i].director.name)
+	for i := 0; i < len(cart.films); i++ {
+		fmt.Println(i+1, ".", cart.films[i].name, cart.films[i].director.name)
 	}
 	fmt.Println("Выбор фильма от 1 до 10. 11 вернуться в меню.")
 	doubleMenu := 0
 	fmt.Scanln(&doubleMenu)
 	if doubleMenu <= 10 {
-		fmt.Println(cart.film[doubleMenu-1])
+		fmt.Println(cart.films[doubleMenu-1])
 	}
 	return cart
 }
+func createFile() {
+	_, err := os.Create("Kartoteka.txt")
+	if err != nil {
+		log.Fatalf("Ошибка создания файла %s", err)
+	}
+}
 
 // чтение данных в программу
-func (cart cartoteka) openAndReadFale() cartoteka {
-	file, err := os.Open("Картотека.txt")
+func (cart cartoteka) openAndReadFile() cartoteka {
+	file, err := os.Open("Kartoteka.txt")
 	if err != nil {
-		_, err := os.Create("Картотека.txt")
-		if err != nil {
-			log.Fatalf("Ошибка создания файла %s", err)
-		}
-
+		createFile()
 	}
 	newFilm := cinema{}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 		words := strings.Fields(line) // Разбиение строки на слова
-		for i, word := range words {
-			if i == 0 {
-				newFilm.name = word
-			} else if i == 2 {
-				newFilm.director.name = word
-			} else if i == 3 {
-				newFilm.director.lastName = word
-			}
-			// Попытка преобразования слова в число
-			if num, err := strconv.Atoi(word); err == nil {
-				if i == 1 {
-					newFilm.age = num
-				} else if i == 4 {
-					newFilm.director.yearsOld = num
-				}
+		for range words {
+			newFilm.name = words[0]
+
+			newFilm.director.name = words[2]
+
+			newFilm.director.lastName = words[3]
+
+			num, err := strconv.Atoi(words[1])
+
+			newFilm.age = num
+
+			num1, err := strconv.Atoi(words[4])
+
+			newFilm.director.yearsOld = num1
+			if err != nil {
+				log.Fatal(err)
 			}
 		}
-		cart.film = append(cart.film, newFilm)
+
+		defer file.Close()
+		cart.films = append(cart.films, newFilm)
 		cart.filmsAmount++
 	}
-
 	return cart
 }
 
@@ -115,7 +119,7 @@ func (cart cartoteka) openAndReadFale() cartoteka {
 func (cart cartoteka) fillCartoteka() cartoteka {
 	newFilm := cinema{}
 	newFilm = newFilm.fillCinema()
-	cart.film = append(cart.film, newFilm)
+	cart.films = append(cart.films, newFilm)
 	cart.filmsAmount++
 	return cart
 }
@@ -139,39 +143,28 @@ func (newFilm cinema) fillCinema() cinema {
 	return newFilm
 }
 
-// Сортировка и сохранение данных в файл
+// Запись и сохранение данных в файл
 func (cart cartoteka) save() {
-	bufer := []cinema{}
-
-	createFile, err := os.Create("Картотека.txt")
+	createFile, err := os.Create("Kartoteka.txt")
 	if err != nil {
-		log.Fatalf("Ошибка открытия файла %s", err)
+		log.Fatalf("Ошибка создпния файла %s", err)
 	}
 	defer createFile.Close()
 	writer := bufio.NewWriter(createFile)
-	buf := cart.dataProcessing(bufer)
-	for _, line := range buf {
-		age1 := line.age
-		age2 := strconv.Itoa(age1)
-		yearsOld1 := line.director.yearsOld
-		yearsOld2 := strconv.Itoa(yearsOld1)
-		_, err = writer.WriteString(line.name + " " + age2 + " " + line.director.name + " " + line.director.lastName + " " + yearsOld2 + "\n")
-		if err != nil {
-			log.Fatalf("ошибка считывания данных %s", err)
+	for _, line := range cart.films {
+		if line.age != 0 {
+			age := strconv.Itoa(line.age)
+			yearsOld := strconv.Itoa(line.director.yearsOld)
+			_, err = writer.WriteString(line.name + " " + age + " " + line.director.name + " " + line.director.lastName + " " + yearsOld + "\n")
+			if err != nil {
+				log.Fatalf("ошибка записи данных %s", err)
+			}
+
+			err = writer.Flush()
+			if err != nil {
+				fmt.Printf("Ошибка записи в буфер %s", err)
+			}
 		}
 
-		err = writer.Flush()
-		if err != nil {
-			fmt.Printf("Ошибка записи в буфер %s", err)
-		}
 	}
-}
-
-// сохранение из буфера
-func (cart cartoteka) dataProcessing(bufer []cinema) []cinema {
-
-	for i := range cart.film {
-		bufer = append(bufer, cart.film[i])
-	}
-	return bufer
 }
