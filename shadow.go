@@ -71,12 +71,6 @@ func (cart cartoteka) osnov() cartoteka {
 	}
 	return cart
 }
-func createFile() {
-	_, err := os.Create("Kartoteka.txt")
-	if err != nil {
-		log.Fatalf("Ошибка создания файла %s", err)
-	}
-}
 
 // чтение данных в программу
 func (cart cartoteka) openAndReadFile() cartoteka {
@@ -97,17 +91,17 @@ func (cart cartoteka) openAndReadFile() cartoteka {
 			newFilm.director.lastName = words[3]
 
 			num, err := strconv.Atoi(words[1])
-
-			newFilm.age = num
-
-			num1, err := strconv.Atoi(words[4])
-
-			newFilm.director.yearsOld = num1
 			if err != nil {
 				log.Fatal(err)
 			}
-		}
+			newFilm.age = num
 
+			num1, error := strconv.Atoi(words[4])
+			if error != nil {
+				log.Fatal(err)
+			}
+			newFilm.director.yearsOld = num1
+		}
 		defer file.Close()
 		cart.films = append(cart.films, newFilm)
 		cart.filmsAmount++
@@ -143,28 +137,34 @@ func (newFilm cinema) fillCinema() cinema {
 	return newFilm
 }
 
+// Создание файла
+func createFile() (*os.File, error) {
+	file, err := os.Create("Kartoteka.txt")
+	if err != nil {
+		log.Fatalf("Ошибка создания файла %s", err)
+	}
+	return file, err
+}
+
 // Запись и сохранение данных в файл
 func (cart cartoteka) save() {
-	createFile, err := os.Create("Kartoteka.txt")
+	file, err := createFile()
 	if err != nil {
 		log.Fatalf("Ошибка создпния файла %s", err)
 	}
-	defer createFile.Close()
-	writer := bufio.NewWriter(createFile)
+	defer file.Close()
+	writer := bufio.NewWriter(file)
 	for _, line := range cart.films {
-		if line.age != 0 {
-			age := strconv.Itoa(line.age)
-			yearsOld := strconv.Itoa(line.director.yearsOld)
-			_, err = writer.WriteString(line.name + " " + age + " " + line.director.name + " " + line.director.lastName + " " + yearsOld + "\n")
-			if err != nil {
-				log.Fatalf("ошибка записи данных %s", err)
-			}
-
-			err = writer.Flush()
-			if err != nil {
-				fmt.Printf("Ошибка записи в буфер %s", err)
-			}
+		age := strconv.Itoa(line.age)
+		yearsOld := strconv.Itoa(line.director.yearsOld)
+		_, err = writer.WriteString(line.name + " " + age + " " + line.director.name + " " + line.director.lastName + " " + yearsOld + "\n")
+		if err != nil {
+			log.Fatalf("ошибка записи данных %s", err)
 		}
+	}
 
+	err = writer.Flush()
+	if err != nil {
+		fmt.Printf("Ошибка записи в буфер %s", err)
 	}
 }
