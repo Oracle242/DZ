@@ -138,29 +138,29 @@ func (newFilm cinema) fillCinema() cinema {
 }
 
 // Создание файла
-func createFile() (*os.File, error) {
+func createFile() *os.File {
 	file, err := os.Create("Kartoteka.txt")
 	if err != nil {
 		log.Fatalf("Ошибка создания файла %s", err)
 	}
-	return file, err
+	return file
 }
 
 // Запись и сохранение данных в файл
 func (cart cartoteka) save() {
-	file, err := createFile()
+	file := createFile()
 	defer file.Close()
 	writer := bufio.NewWriter(file)
 	for _, line := range cart.films {
 		age := strconv.Itoa(line.age)
 		yearsOld := strconv.Itoa(line.director.yearsOld)
-		_, err = writer.WriteString(line.name + " " + age + " " + line.director.name + " " + line.director.lastName + " " + yearsOld + "\n")
+		_, err := writer.WriteString(line.name + " " + age + " " + line.director.name + " " + line.director.lastName + " " + yearsOld + "\n")
 		if err != nil {
 			log.Fatalf("ошибка записи данных %s", err)
 		}
 	}
 
-	err = writer.Flush()
+	err := writer.Flush()
 	if err != nil {
 		fmt.Printf("Ошибка записи в буфер %s", err)
 	}
