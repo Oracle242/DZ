@@ -149,9 +149,6 @@ func createFile() (*os.File, error) {
 // Запись и сохранение данных в файл
 func (cart cartoteka) save() {
 	file, err := createFile()
-	if err != nil {
-		log.Fatalf("Ошибка создпния файла %s", err)
-	}
 	defer file.Close()
 	writer := bufio.NewWriter(file)
 	for _, line := range cart.films {
