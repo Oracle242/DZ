@@ -2,28 +2,28 @@ package main
 
 import "fmt"
 
-type Prov struct {
-	Name  string
-	Core  string
-	Core2 string
+type SmarPtpone struct {
+	Brand string
+	Model string
+	OS    string
 }
 
-func (p Prov) Company() Prov {
-	fmt.Printf("Компания %s занимается этим %s и %s.\n", p.Name, p.Core, p.Core2)
-	return p
-}
-
-func (p Prov) Concurent(Name string) {
-	fmt.Println("Каждый год соревнуется с", Name)
+func (s SmarPtpone) Praise() {
+	fmt.Printf("Самый надежный телефон %s %s на базе операционной системмы %s.\n", s.Brand, s.Model, s.OS)
 }
 
 func main() {
-	mts := Prov{
-		Name:  "MTS",
-		Core:  "telecomynication",
-		Core2: "IT",
+	apple := SmarPtpone{
+		Brand: "Apple",
+		Model: "13 pro Max",
+		OS:    "iOS",
 	}
 
-	mts.Company().Concurent("Rosteleckomom")
-	Prov.Concurent(Prov.Company(mts), "Rosteleckomom")
+	samsung := SmarPtpone{
+		Brand: "Samsung",
+		Model: "Pipulia",
+		OS:    "Android",
+	}
+	apple.Praise()
+	SmarPtpone.Praise(samsung)
 }
