@@ -1,29 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"myProj/electronic"
+)
 
-type SmarPtpone struct {
-	Brand string
-	Model string
-	OS    string
-}
-
-func (s SmarPtpone) Praise() {
-	fmt.Printf("Самый надежный телефон %s %s на базе операционной системмы %s.\n", s.Brand, s.Model, s.OS)
+func printCharacteristics(p electronic.Phone) {
+	fmt.Printf("Brand: %s\nModel: %s\nType: %s\n", p.Brand(), p.Model(), p.Type())
+	if sp, ok := p.(electronic.Smartphone); ok {
+		fmt.Printf("OS: %s\n", sp.OS())
+	}
+	if stp, ok := p.(electronic.StationPhone); ok {
+		fmt.Printf("Buttons: %d\n", stp.ButtonsCount())
+	}
 }
 
 func main() {
-	apple := SmarPtpone{
-		Brand: "Apple",
-		Model: "13 pro Max",
-		OS:    "iOS",
-	}
+	apple := electronic.NewApplePhone("iPhone X")
+	android := electronic.NewAndroidPhone("Samsung", "Galaxy S9")
+	radio := electronic.NewRadioPhone("Sony", 12)
 
-	samsung := SmarPtpone{
-		Brand: "Samsung",
-		Model: "Pipulia",
-		OS:    "Android",
-	}
-	apple.Praise()
-	SmarPtpone.Praise(samsung)
+	printCharacteristics(apple)
+	fmt.Println()
+	printCharacteristics(android)
+	fmt.Println()
+	printCharacteristics(radio)
 }
