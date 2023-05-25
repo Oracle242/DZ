@@ -26,7 +26,7 @@ func (m Man) NewCrimes() int {
 	return m.Crimes
 }
 
-func NewPeopleMap() map[string]Man {
+func PeopleMap() map[string]Man {
 	people := make(map[string]Man)
 	people["Алексей"] = Man{Name: "Алексей", LastName: "Руманов", Age: 22, Gender: "Мужчина", Crimes: 1}
 	people["Петр"] = Man{Name: "Петр", LastName: "Пермитин", Age: 65, Gender: "Мужчина", Crimes: 2}
@@ -36,20 +36,24 @@ func NewPeopleMap() map[string]Man {
 	return people
 }
 
-func Crimess() {
+func searchPeopleCrimes() {
 	key := []string{}
 	crimes := []int{}
-	for k, v := range NewPeopleMap() {
+	for k, v := range PeopleMap() {
 		if v.Crimes >= 0 {
 			key = append(key, k)
 			crimes = append(crimes, v.Crimes)
 		}
 	}
-	max, name := findMinAndMax(crimes, key)
+	max, name := searchMaxCrimes(crimes, key)
+	printBd(max, name)
+}
+
+func printBd(max int, name string) {
 	if max == 0 {
 		fmt.Println("В базе данных нет информации по запрошенным подозреваемым")
 	} else {
-		for k, v := range NewPeopleMap() {
+		for k, v := range PeopleMap() {
 			if k == name {
 				fmt.Printf("Самый главный злодей:\n Имя: %s\n Фамилия: %s\n Возраст: %v\n Пол: %s\n Колличество преступлений: %v\n", v.Name, v.LastName, v.Age, v.Gender, v.Crimes)
 			}
@@ -57,7 +61,7 @@ func Crimess() {
 	}
 }
 
-func findMinAndMax(crimes []int, key []string) (int, string) {
+func searchMaxCrimes(crimes []int, key []string) (int, string) {
 	var max int
 	var name string
 	if len(crimes) == 1 {
@@ -80,5 +84,5 @@ func findMinAndMax(crimes []int, key []string) (int, string) {
 }
 
 func main() {
-	Crimess()
+	searchPeopleCrimes()
 }
