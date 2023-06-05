@@ -28,21 +28,24 @@ func (m Man) NewCrimes() int {
 
 func PeopleMap() map[string]Man {
 	people := make(map[string]Man)
-	people["Алексей"] = Man{Name: "Алексей", LastName: "Руманов", Age: 22, Gender: "Мужчина", Crimes: 1}
-	people["Петр"] = Man{Name: "Петр", LastName: "Пермитин", Age: 65, Gender: "Мужчина", Crimes: 2}
+	people["Алексей"] = Man{Name: "Алексей", LastName: "Руманов", Age: 22, Gender: "Мужчина", Crimes: 11}
+	people["Петр"] = Man{Name: "Петр", LastName: "Пермитин", Age: 65, Gender: "Мужчина", Crimes: 0}
 	people["Мария"] = Man{Name: "Мария", LastName: "Краснова", Age: 23, Gender: "Женщина", Crimes: 5}
-	people["Роман"] = Man{Name: "Роман", LastName: "Гудман", Age: 37, Gender: "Мужчина", Crimes: 6}
+	people["Роман"] = Man{Name: "Роман", LastName: "Гудман", Age: 37, Gender: "Мужчина", Crimes: 1}
 	people["Софья"] = Man{Name: "Софья", LastName: "Гудман", Age: 34, Gender: "Женщина", Crimes: 11}
 	return people
 }
 
 func searchPeopleCrimes() {
+	nameCr := []string{"Петр", "Алексей", "Роман"}
 	key := []string{}
 	crimes := []int{}
 	for k, v := range PeopleMap() {
-		if v.Crimes >= 0 {
-			key = append(key, k)
-			crimes = append(crimes, v.Crimes)
+		for i := 0; i < len(nameCr); i++ {
+			if v.Name == nameCr[i] {
+				key = append(key, k)
+				crimes = append(crimes, v.Crimes)
+			}
 		}
 	}
 	max, name := searchMaxCrimes(crimes, key)
@@ -62,8 +65,10 @@ func printBd(max int, name string) {
 }
 
 func searchMaxCrimes(crimes []int, key []string) (int, string) {
+
 	var max int
 	var name string
+
 	if len(crimes) == 1 {
 		return crimes[0], key[0]
 	}
