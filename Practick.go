@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func ellementaruNumb(numb int) int {
+func searchPrimeNumbers(numb int) int {
 	for i := numb - 1; i > 1; i-- {
 		if numb%i == 0 {
 			return 0
@@ -12,12 +12,12 @@ func ellementaruNumb(numb int) int {
 }
 
 func main() {
-	x := 0
-	for i := 0; x < 3; i++ {
-		elNu := ellementaruNumb(i)
+	counter := 0
+	for i := 2; counter < 20; i++ {
+		elNu := searchPrimeNumbers(i)
 		if elNu != 0 {
 			fmt.Println(elNu)
-			x++
+			counter++
 		}
 	}
 }
