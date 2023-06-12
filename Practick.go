@@ -2,22 +2,21 @@ package main
 
 import "fmt"
 
-func ellementaruNumb(numbs int) int {
-	for i := numbs - 1; i > 1; i-- {
-		if numbs%i == 0 {
+func ellementaruNumb(numb int) int {
+	for i := numb - 1; i > 1; i-- {
+		if numb%i == 0 {
 			return 0
 		}
 	}
-
-	return numbs
+	return numb
 }
 
 func main() {
 	x := 0
-	for i := 0; x <= 20; i++ {
-		ellementaruNumb(i)
-		if ellementaruNumb(i) != 0 {
-			fmt.Println(ellementaruNumb(i))
+	for i := 0; x < 3; i++ {
+		elNu := ellementaruNumb(i)
+		if elNu != 0 {
+			fmt.Println(elNu)
 			x++
 		}
 	}
