@@ -2,23 +2,12 @@ package main
 
 import "fmt"
 
-func palindromeSearch(nubm string) bool {
-	if len(string(nubm)) == 1 || nubm <= string("1") {
+func palindromeSearch(num string) bool {
+	if num < "1" {
 		return false
 	}
-
-	essence := []string{}
-	reflection := []string{}
-	for i := 0; i <= len(string(nubm))-1; i++ {
-		essence = append(essence, string(nubm[i]))
-	}
-
-	for j := 1; j <= len(string(nubm)); j++ {
-		reflection = append(reflection, string(nubm[len(string(nubm))-j]))
-	}
-
-	for i := 0; i < len(essence)-1; i++ {
-		if essence[i] != reflection[i] {
+	for i := 1; i < len(num)+1; i++ {
+		if num[i-1] != num[len(num)-i] {
 			return false
 		}
 	}
@@ -26,8 +15,8 @@ func palindromeSearch(nubm string) bool {
 }
 
 func main() {
-	nubm := ""
+	numb := "765"
 	fmt.Println("Укажите число для проверки на палиндром")
-	fmt.Scanln(&nubm)
-	fmt.Println(palindromeSearch(nubm))
+	fmt.Scanln(&numb)
+	fmt.Println(palindromeSearch(numb))
 }
