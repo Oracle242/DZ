@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func palindromeSearch(num string) bool {
-	if num < "1" {
+	if string(num[0]) == "-" {
 		return false
 	}
 	for i := 1; i < len(num)+1; i++ {
@@ -15,7 +15,7 @@ func palindromeSearch(num string) bool {
 }
 
 func main() {
-	numb := "765"
+	numb := ""
 	fmt.Println("Укажите число для проверки на палиндром")
 	fmt.Scanln(&numb)
 	fmt.Println(palindromeSearch(numb))
