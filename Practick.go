@@ -2,12 +2,9 @@ package main
 
 import "fmt"
 
-func palindromeSearch(num string) bool {
-	if string(num[0]) == "-" {
-		return false
-	}
-	for i := 1; i < len(num)+1; i++ {
-		if num[i-1] != num[len(num)-i] {
+func searchPrimeNumbers(numb int) bool {
+	for i := numb - 1; i > 1; i-- {
+		if numb%i == 0 {
 			return false
 		}
 	}
@@ -15,8 +12,12 @@ func palindromeSearch(num string) bool {
 }
 
 func main() {
-	numb := ""
-	fmt.Println("Укажите число для проверки на палиндром")
-	fmt.Scanln(&numb)
-	fmt.Println(palindromeSearch(numb))
+	counter := 0
+	for i := 2; counter < 20; i++ {
+		elNu := searchPrimeNumbers(i)
+		if elNu == true {
+			fmt.Println(i)
+			counter++
+		}
+	}
 }
