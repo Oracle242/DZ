@@ -2,30 +2,30 @@ package main
 
 import "fmt"
 
-func findMostOftenRepeatedOptimized(array []int) (mostOften int, err error) {
+func findMostOftenRepeatedWithMap(array []int) (max int, err error) {
 	if len(array) == 0 {
-		return 0, fmt.Errorf("could not found repeated numbers in empty slice")
+		return 0, fmt.Errorf("не удалось найти повторяющиеся числа в пустом срезе")
 	}
+	mapps := make(map[int]int)
+	d, smax := 0, 0
+	max = 0
+	for i := 0; i < len(array); i++ {
+		if mapps[array[i]] == 0 {
+			mapps[array[i]] = 1
 
-	var maxIndex, maxCount = 0, 0
-	for i, number := range array {
-		currentCount := 0
-		for i, _ := range array {
-			if number == array[i] {
-				currentCount++
-			}
+		} else {
+			d++
+			mapps[array[i]] = d
+			smax = d
 		}
-
-		if currentCount > maxCount {
-			maxIndex = i
-			maxCount = currentCount
+		if mapps[array[i]] == smax {
+			max = array[i]
 		}
 	}
-
-	return array[maxIndex], nil
+	return max, fmt.Errorf("Ошибки не обнаружены!")
 }
 
 func main() {
-	num := []int{1, 1, 2, 3, 6, 4, 3, 2, 3, 1, 3}
-	fmt.Println(findMostOftenRepeatedOptimized(num))
+	num := []int{2, 8, 3, 8, 2, 8, 1}
+	fmt.Println(findMostOftenRepeatedWithMap(num))
 }
