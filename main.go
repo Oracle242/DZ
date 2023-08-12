@@ -81,5 +81,3 @@ func (bc *BankClient) Withdrawal(amount *int) error {
 func (bc *BankClient) Balance() int {
 	return bc.balance
 }
-
-//
