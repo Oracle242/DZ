@@ -1,83 +1,141 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"math/rand"
+	"os"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
 
-type BankClient struct {
-	balance int
+type RingIntBuffer struct {
+	array []int
+	pos   int
+	size  int
+	m     sync.Mutex
 }
 
-var mu = sync.RWMutex{}
+// Функция конструктор
+func NewRingIntBuffer(size int) *RingIntBuffer {
+	return &RingIntBuffer{make([]int, size), -1, size, sync.Mutex{}}
+}
 
-func main() {
-	client := &BankClient{}
-	rand.Seed(time.Now().UnixNano())
-	amount := 0
-	for i := 0; i < 10; i++ {
-		go func() {
+// Добовление эллемента
+func (r *RingIntBuffer) Push(el int) {
+	r.m.Lock()
+	defer r.m.Unlock()
+	if r.pos == r.size-1 {
+		for i := 1; i <= r.size-1; i++ {
+			r.array[i-1] = r.array[i]
+		}
+		r.array[r.pos] = el
+	} else {
+		r.pos++
+		r.array[r.pos] = el
+	}
+}
 
-			for {
-				amount := rand.Intn(10) + 1
-				client.Deposit(&amount)
-			}
-		}()
+// Поиск эллемента
+func (r *RingIntBuffer) Get() []int {
+	if r.size <= 0 {
+		return nil
 	}
-	for i := 0; i < 5; i++ {
-		go func() {
-			for {
-				amount := rand.Intn(5) + 1
-				err := client.Withdrawal(&amount)
-				if err != nil {
-					fmt.Println(err)
-				}
-			}
-		}()
-	}
-	for {
-		command := ""
-		fmt.Scanln(&command)
-		switch command {
-		case "balance":
-			fmt.Println(client.Balance())
-		case "deposit":
-			fmt.Scanln(&amount)
-			client.Deposit(&amount)
-			fmt.Println(client.Balance())
-		case "withdrawal":
-			fmt.Scanln(&amount)
-			client.Withdrawal(&amount)
-			fmt.Println(client.Balance())
-		case "exit":
+	r.m.Lock()
+	defer r.m.Unlock()
+	var output []int = r.array[:r.pos+1]
+	r.pos = -1
+	return output
+}
+
+func read(nextStage chan<- int, done chan bool) {
+	scanner := bufio.NewScanner(os.Stdin)
+	var data string
+	for scanner.Scan() {
+		data = scanner.Text()
+		if strings.EqualFold(data, "exit") {
+			fmt.Println("Программа завершила работу")
+			close(done)
 			return
-		default:
-			fmt.Println("Unsupported command. You can use commands: balance, deposit, withdrawal, exit")
+		}
+		i, err := strconv.Atoi(data)
+		if err != nil {
+			fmt.Println("Программа обрабатывает толлько целые числа")
+			continue
+		}
+		nextStage <- i
+	}
+}
+
+func negativeFilterStageInt(previosStageChannel <-chan int, nextStageChannel chan<- int, done <-chan bool) {
+	for {
+		select {
+		case data := <-previosStageChannel:
+			if data > 0 {
+				nextStageChannel <- data
+			}
+		case <-done:
+			return
 		}
 	}
 }
 
-func (bc *BankClient) Deposit(amount *int) {
-	time.Sleep(time.Second / 5)
-	mu.RLock()
-	bc.balance += *amount
-	mu.RUnlock()
-}
-
-func (bc *BankClient) Withdrawal(amount *int) error {
-	time.Sleep(time.Second / 5)
-	mu.RLock()
-	if bc.balance < *amount {
-		return fmt.Errorf("not enough balance")
+func notDividedThreeFunc(previosStageChannel <-chan int, nextStageChannel chan<- int, done <-chan bool) {
+	for {
+		select {
+		case data := <-previosStageChannel:
+			if data%3 == 0 {
+				nextStageChannel <- data
+			}
+		case <-done:
+			return
+		}
 	}
-	bc.balance -= *amount
-	mu.RUnlock()
-	return nil
-
 }
 
-func (bc *BankClient) Balance() int {
-	return bc.balance
+var bufferSize int = 10
+var bufferDrainInterval time.Duration = 10 * time.Second
+
+func bufferStageFunc(previosStageChannel <-chan int, nextStageChannel chan<- int, done <-chan bool, size int, interval time.Duration) {
+	buffer := NewRingIntBuffer(size)
+	for {
+		select {
+		case data := <-previosStageChannel:
+			buffer.Push(data)
+		case <-time.After(interval):
+			bufferData := buffer.Get()
+			if bufferData != nil {
+				for _, data := range bufferData {
+					nextStageChannel <- data
+				}
+			}
+		case <-done:
+			return
+		}
+	}
+}
+
+func main() {
+	input := make(chan int)
+	done := make(chan bool)
+	go read(input, done)
+
+	negativeChanFilter := make(chan int)
+	go negativeFilterStageInt(input, negativeChanFilter, done)
+
+	notDividedThreeCannel := make(chan int)
+	go notDividedThreeFunc(negativeChanFilter, notDividedThreeCannel, done)
+
+	bufferedInthannel := make(chan int)
+	go bufferStageFunc(notDividedThreeCannel, bufferedInthannel, done, bufferSize, bufferDrainInterval)
+
+	for {
+		select {
+		case data := <-bufferedInthannel:
+			fmt.Println("Обработанные данные", data)
+		case <-done:
+			return
+		}
+	}
 }
