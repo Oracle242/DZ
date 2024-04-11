@@ -4,6 +4,7 @@ import (
 	"GoNews/pkg/storage"
 	"database/sql"
 	"fmt"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -13,7 +14,12 @@ type PostgresDB struct {
 }
 
 func New(connString string) (*PostgresDB, error) {
-	db, err := sql.Open("postgres", connString)
+	pwd := os.Getenv("DBPASS")
+	if pwd == "" {
+		os.Exit(1)
+	}
+	connstr := "postgres://postgres:" + pwd + connString
+	db, err := sql.Open("postgres", connstr)
 	if err != nil {
 		return nil, err
 	}
