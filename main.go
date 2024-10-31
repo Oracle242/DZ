@@ -265,7 +265,6 @@ func getLocations(db *sql.DB) []Locations {
 	return locations
 }
 
-// dsf
 func createLocation(db *sql.DB, c *gin.Context) (string, error) {
 	title := c.PostForm("title")
 	description := c.PostForm("description")
